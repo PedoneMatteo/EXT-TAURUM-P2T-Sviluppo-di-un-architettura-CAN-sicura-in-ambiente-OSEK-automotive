@@ -1,0 +1,63 @@
+EE_TID task_id_vec().	Vettore con gli id dei tasks
+riga 102: funzione-> compute_task_tid(EE_TID task_id_vec[], EE_UREG t)
+		  accesso al vettore task id array come un vero vettore anche se è
+		  dichiarato come un puntatore
+riga 113: funzione-> EE_oo_autostart_tasks(AppModeType Mode)
+												autostart tasks -> Set to either TRUE or FALSE. 
+																   AUTOSTART defines 
+																   whether the task is moved into
+																   the READY state automatically by 
+																   the StartOS() API service.
+
+													alarms -> un tipo di timer con grande flessibilità
+EE_TIDTYPEALARM alarm_id_vec()
+riga 143: funzione-> compute_alarm_id(EE_TYPEALARM alarm_id_vec[], EE_UREG t)
+		  accesso al vettore access alarm id array come un vero vettore anche se è
+		  dichiarato come un puntatore
+riga 155: funzione-> EE_oo_autostart_alarms(AppModeType Mode)
+		  autostart alarms
+		  
+		  
+//autostart SCHEDULE TABLES
+riga 173: funzione-> EE_as_schedule_table_autostart_data*  get_schedule_table_autostart_data(
+						EE_as_schedule_table_autostart_data scheduletable_data[], EE_UREG t)
+		  funzione-> EE_oo_autostart_schedule_tables(AppModeType MOde)
+		  
+//autostart OS
+riga 224: funzione-> static void EE_oo_autostart_os(AppModeType Mode)
+					 //vengono richiamate EE_oo_autostart_tasks
+										  EE_oo_autostart_alarms
+										  EE_oo_autostart_schedule_tables
+
+
+//StartupHook->	(?) definisce l'esistenza della relativa "hook routine" e può assumere o TRUE o FALSE 
+Prototype -> void StartupHook(void);
+	|	Questa hook routine, se utilizzata, deve essere fornita dall'applicazione e definita 
+	|	nel file OIL di configurazione come disponibile. Questa routine di hook viene chiamata dal sistema operativo 
+	|	dopo che il sistema è stato inizializzato e appena prima di eseguire lo scheduler la prima volta 
+	|	dopo che StartOS() è stato invocato. L'applicazione può utilizzare questa routine di hook per 
+	|	inizializzare i driver di dispositivo, avviare attività in base all'APPMODE attivo o 
+	|	fornire un'ALTRA INIZIALIZZAZIONE SPECIFICA DELL'APPLICAZIONE.
+
+riga 237: static void EE_oo_call_StartupHook(){ StartupHook();}
+
+
+//
+StatusType EE_oo_StartOs(AppModeType Mode){
+															---variabili in uso---
+extern AppModeType volatile EE_as_os_application_mode[]; 
+															->The following contains cores application mode
+extern EE_UREG volatile EE_as_core_mask; 
+															->Mask for autosar cores started
+register EE_UREG i; 
+															->index used to cycle on cores an OS-Applications
+register AppModeTypemode_to_check = DONOTCARE 
+															-> hold the value of application mode to be checked
+riga 418:
+	The Operating System module shall execute an
+    application-specific startup hook with the access rights of the
+    associated OS-Application
+
+
+
+

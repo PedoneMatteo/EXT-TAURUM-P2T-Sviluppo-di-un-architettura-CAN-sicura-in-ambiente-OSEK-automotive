@@ -1,0 +1,4 @@
+shiftRows    |
+	     |-> invertire indici
+Mix columns  |
+
